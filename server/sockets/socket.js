@@ -28,6 +28,9 @@ io.on('connection', (client) => {
         // ingreso de new person to chat -comunica a todos los usuarios del chat(1)
         client.broadcast.to( data.sala ).emit( 'listaPersona', usuarios.getPersonasPorSala( data.sala ));
         // client.broadcast.emit( 'listaPersona', ({messageAdmin: 'Admin', message: ` ${ data.nombre } ingreso al chat` }) );
+        // Envia msm cuando ingresa
+        client.broadcast.to( data.sala ).emit( 'crearMensaje', crearMensaje( 'Admin', ` ${ data.nombre } Unió al chat`) );
+
 
         // return by callback
         callback(usuarios.getPersonasPorSala( data.sala ));
@@ -35,13 +38,14 @@ io.on('connection', (client) => {
     });
 
     // Create message
-    client.on( 'crearMensaje', ( message ) => {
+    client.on( 'crearMensaje', ( data, callback ) => {
 
         let persona = usuarios.getPersona( client.id );
-        let mensaje = crearMensaje( persona.nombre, message.message );
+        let mensaje = crearMensaje( persona.nombre, data.mensaje );
 
         client.broadcast.to( persona.sala ).emit( 'crearMensaje', mensaje );
 
+        callback( mensaje );
     });
 
 
@@ -60,7 +64,7 @@ io.on('connection', (client) => {
     client.on('mensajePrivado', ( data ) => {
 
         let persona = usuarios.getPersona( client.id );
-        let mensaje = crearMensaje( persona.nombre, data.message );
+        let mensaje = crearMensaje( persona.nombre, data.mensaje );
         // Private
         client.broadcast.to(data.para).emit( 'mensajePrivado', mensaje );
 

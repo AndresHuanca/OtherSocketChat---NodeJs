@@ -1,29 +1,25 @@
 var socket = io();
 
-// get params name person
-var params = new URLSearchParams( window.location.search);
+var params = new URLSearchParams(window.location.search);
 
-// Validatión name person
-if( !params.has('nombre') ||!params.has('sala') ) {
-    // redir
+if (!params.has('nombre') || !params.has('sala')) {
     window.location = 'index.html';
-    throw new Error( 'the name is sala necesary ');
+    throw new Error('El nombre y sala son necesarios');
 }
 
-// save user
 var usuario = {
-    nombre: params.get('nombre'), 
-    sala: params.get('sala'),
+    nombre: params.get('nombre'),
+    sala: params.get('sala')
 };
 
-// Sockets config
+
 
 socket.on('connect', function() {
     console.log('Conectado al servidor');
 
-    // emit and escucha callback
-    socket.emit( 'entrarChat', usuario, function( resp) {
-        console.log( resp );
+    socket.emit('entrarChat', usuario, function(resp) {
+        console.log('Usuarios conectados', resp);
+        renderizarUsuarios( resp );
     });
 
 });
@@ -37,31 +33,30 @@ socket.on('disconnect', function() {
 
 
 // Enviar información
-// socket.emit('enviarMensaje', {
-//     usuario: 'Fernando',
+// socket.emit('crearMensaje', {
+//     nombre: 'Fernando',
 //     mensaje: 'Hola Mundo'
 // }, function(resp) {
 //     console.log('respuesta server: ', resp);
 // });
 
-// Escuchar información si sale
+// Escuchar información
 socket.on('crearMensaje', function(mensaje) {
-
-    console.log('Servidor salida:', mensaje);
-
+    console.log('Servidor:', mensaje);
+    renderizarMensajes( mensaje, false );
+    scrollBottom();
 });
 
-// Escuchar información si ingresa 
-socket.on('listaPersona', function(mensaje) {
-
-    console.log('Servidor ingreso :', mensaje);
-
+// Escuchar cambios de usuarios
+// cuando un usuario entra o sale del chat
+socket.on('listaPersona', function(personas) {
+    console.log(personas);
+    renderizarUsuarios( personas );
 });
 
-// Message private
+// Mensajes privados
 socket.on('mensajePrivado', function(mensaje) {
 
-    console.log('Message Private :', mensaje);
+    console.log('Mensaje Privado:', mensaje);
 
 });
-

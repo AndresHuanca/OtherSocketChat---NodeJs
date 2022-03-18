@@ -1,9 +1,9 @@
 // Estructure message 
-const crearMensaje = ( name, message = '' ) => {
+const crearMensaje = ( nombre, mensaje = '' ) => {
 
     return {
-        name,
-        message,
+        nombre,
+        mensaje,
         date: new Date().getTime()
     };
 
