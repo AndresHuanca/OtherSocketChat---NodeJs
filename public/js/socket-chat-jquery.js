@@ -48,7 +48,7 @@ function renderizarUsuarios( personas ) {
             
         }
         
-        if( personas[i].nombre !== 'rose' && personas[i].nombre !== 'Andres' && personas[i].nombre !== 'julia' && personas[i].nombre !== 'carmen' ){
+        if( personas[i].nombre !== 'rose' && personas[i].nombre !== 'Andres' && personas[i].nombre !== 'julia' && personas[i].nombre !== 'carmen' && personas[i].nombre !== 'andri'  ){
 
             html += '<li>'
             html +=     '<a  data-id="'+ personas[i].id +'" href="javascript:void(0)"><img src="assets/images/users/1.jpg" alt="user-img" class="img-circle"> <span>'+ personas[i].nombre +'<small class="text-success">online</small></span></a>'
